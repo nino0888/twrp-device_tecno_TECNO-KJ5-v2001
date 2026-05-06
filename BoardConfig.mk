@@ -41,11 +41,16 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 ALLOW_MISSING_DEPENDENCIES := true
 
 # =========================
-# Display (CRITICAL FOR SCREENSHOT + FB)
+# Display (IMPORTANT FIX AREA)
 # =========================
 TARGET_SCREEN_DENSITY := 320
 TW_THEME := portrait_hdpi
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
+
+# FIX: framebuffer/screenshot stability (MTK safe)
+TW_NO_SCREEN_BLANK := true
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_USE_COM_COMPRESSION := false
 
 # =========================
 # Device
@@ -53,7 +58,7 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 TARGET_OTA_ASSERT_DEVICE := KJ5
 
 # =========================
-# Kernel (PREBUILT MTK)
+# Kernel (PREBUILT ONLY)
 # =========================
 TARGET_NO_KERNEL := false
 TARGET_FORCE_PREBUILT_KERNEL := true
@@ -111,7 +116,7 @@ BOARD_MAIN_PARTITION_LIST += \
     vendor
 
 # =========================
-# Filesystems (IMPORTANT FIX)
+# Filesystems
 # =========================
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -132,21 +137,19 @@ TARGET_BOARD_PLATFORM := mt6768
 BOARD_VNDK_VERSION := current
 
 # =========================
-# Recovery (HYBRID SAFE)
+# Recovery (HYBRID STABLE)
 # =========================
 TARGET_NO_RECOVERY := true
 
 BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_USES_RECOVERY_AS_VENDOR_BOOT := true
 
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_SUPPRESS_SECURE_ERASE := true
-
-# IMPORTANT: KEEP FALSE FOR MTK PREBUILT RECOVERY
-BOARD_USES_GENERIC_KERNEL_IMAGE := false
 
 # =========================
 # AVB
@@ -160,12 +163,6 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 TW_PREPARE_MEDIA_EARLY := true
 TW_FORCE_KEYMASTER_VER := true
 OF_DEFAULT_KEYMASTER_VERSION := 4.1
-
-# =========================
-# Modules
-# =========================
-# DO NOT FORCE vendor_boot modules yet (causes bootloop in MTK)
-# TW_LOAD_VENDOR_BOOT_MODULES := true
 
 # =========================
 # Debug
@@ -184,26 +181,12 @@ TW_USE_TOOLBOX := true
 TARGET_USES_MKE2FS := true
 
 # =========================
-# UI / Screen Stability (IMPORTANT FOR SCREENSHOT FIX)
-# =========================
-TW_ALLOW_FORMAT_DATA := true
-TW_FRAMERATE := 90
-TW_INCLUDE_FUSE_EXFAT := true
-TW_EXTRA_LANGUAGES := true
-
-TW_SCREEN_BLANK_ON_BOOT := true
-TW_NO_SCREEN_BLANK := true
-
-# =========================
-# USB
+# USB / Storage FIX
 # =========================
 TW_USES_OTG_USB := true
 TW_HAS_MTP := true
 TW_MTP_DEVICE := /dev/mtp_usb
 
-# =========================
-# Storage
-# =========================
 RECOVERY_SDCARD_ON_DATA := true
 TW_USB_STORAGE := true
 
@@ -213,7 +196,7 @@ TW_USB_STORAGE := true
 TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
 
 # =========================
-# Misc Fix
+# Misc
 # =========================
 TW_CUSTOM_CPU_TEMP_PATH := sys/devices/virtual/thermal/thermal_zone4/temp
 
