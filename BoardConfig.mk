@@ -1,11 +1,11 @@
+# =========================
 # Device Path
+# =========================
 DEVICE_PATH := device/tecno/KJ5
 
-TARGET_RECOVERY_DEVICE_DIRS := \
-    $(COMMON_PATH) \
-    $(DEVICE_PATH)
-
+# =========================
 # Architecture Settings
+# =========================
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
 TARGET_CPU_ABI := arm64-v8a
@@ -18,74 +18,74 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_VARIANT := generic
 TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a53
 
-#64bit
 TARGET_SUPPORTS_64_BIT_APPS := true
 TARGET_IS_64_BIT := true
 TARGET_USES_64_BIT_BINDER := true
 
-# Init
-TARGET_INIT_VENDOR_LIB := libinit_TECNO-KJ5
-TARGET_RECOVERY_DEVICE_MODULES := libinit_TECNO-KJ5
-
+BOARD_USES_MTK_HARDWARE := true
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
+# =========================
 # Bootloader Settings
+# =========================
 TARGET_BOOTLOADER_BOARD_NAME := KJ5
 TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
+# =========================
 # Build Hacks
+# =========================
 BUILD_BROKEN_DUP_RULES := true
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+ALLOW_MISSING_DEPENDENCIES := true
 
+# =========================
 # Display Settings
+# =========================
 TARGET_SCREEN_DENSITY := 320
 TW_THEME := portrait_hdpi
 DEVICE_RESOLUTION := 1612x720
-DEVICE_SCREEN_WIDTH := 1612
-DEVICE_SCREEN_HEIGHT := 720
 
-# Assert
-TARGET_OTA_ASSERT_DEVICE := KJ5
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_NO_SCREEN_BLANK := true
 
-# DTBO
-ifndef BOARD_PREBUILT_DTBOIMAGE
-BOARD_KERNEL_SEPARATED_DTBO := true
-endif
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
-ifndef TARGET_PREBUILT_DTB
-BOARD_INCLUDE_DTB_IN_BOOTIMG := true
-else
-BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
-endif
+# SAFE brightness (NO hardcoded broken path)
+TW_MAX_BRIGHTNESS := 255
+TW_DEFAULT_BRIGHTNESS := 120
 
-# Kernel
+# =========================
+# Kernel (PREBUILT ONLY - STABLE)
+# =========================
 TARGET_NO_KERNEL := false
-TARGET_KERNEL_ARCH := $(TARGET_ARCH)
 TARGET_FORCE_PREBUILT_KERNEL := true
-BOARD_RAMDISK_USE_LZ4 := true
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
-BOARD_KERNEL_IMAGE_NAME := kernel
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
-TARGET_KERNEL_CONFIG := FULL-64_defconfig
-TARGET_KERNEL_SOURCE := kernel/tecno/FULL-64
 
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
+
+BOARD_KERNEL_IMAGE_NAME := kernel
+BOARD_RAMDISK_USE_LZ4 := true
+
+# =========================
+# DTBO
+# =========================
+BOARD_KERNEL_SEPARATED_DTBO := true
+
+# =========================
+# Boot image config
+# =========================
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_KERNEL_BASE := 0x40078000
 BOARD_KERNEL_OFFSET := 0x00008000
 BOARD_KERNEL_TAGS_OFFSET := 0x0bc08000
-BOARD_PAGE_SIZE := 4096
-BOARD_TAGS_OFFSET := 0x0bc08000
 BOARD_RAMDISK_OFFSET := 0x07c08000
-BOARD_DTB_SIZE := 182209
 BOARD_DTB_OFFSET := 0x0bc08000
-BOARD_HEADER_SIZE = 2128
+BOARD_PAGE_SIZE := 4096
+
 BOARD_VENDOR_CMDLINE := bootopt=64S3,32N2,64N2
-BOARD_VENDOR_BASE := 0x40078000
 
 BOARD_MKBOOTIMG_ARGS += --vendor_cmdline $(BOARD_VENDOR_CMDLINE)
-BOARD_MKBOOTIMG_ARGS += --pagesize $(BOARD_PAGE_SIZE) --board ""
+BOARD_MKBOOTIMG_ARGS += --pagesize $(BOARD_PAGE_SIZE)
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_TAGS_OFFSET)
@@ -93,143 +93,120 @@ BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_DTB_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
 
-# Partition Sizes
-BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
+# =========================
+# Partitions
+# =========================
+BOARD_FLASH_BLOCK_SIZE := 262144
+
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 67108864
+
 BOARD_SUPER_PARTITION_GROUPS := main
-BOARD_MAIN_SIZE := 9122611200 # (BOARD_SUPER_PARTITION_SIZE - 4194304) 4MiB
-BOARD_SUPER_PARTITIONS_SIZE := 9122611200 # TODO: Fix hardcoded value
+
+BOARD_MAIN_SIZE := 9122611200
+BOARD_SUPER_PARTITIONS_SIZE := 9122611200
+
 BOARD_MAIN_PARTITION_LIST += \
-    odm_dlkm \
     product \
     system \
     system_ext \
     vendor \
-    vendor_dlkm
+    odm_dlkm
 
-BOARD_ODM_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+# =========================
+# Filesystems
+# =========================
 BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_STSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
-BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_ODM_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 
-TARGET_COPY_OUT_ODM_DLKM := odm_dlkm
-TARGET_COPY_OUT_PRODUCT := product
-TARGET_COPY_OUT_SYSTEM := system
-TARGET_COPY_OUT_SYSTEM_EXT := system_ext
-TARGET_COPY_OUT_VENDOR := vendor
-TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
-
-# Platform Settings
-TARGET_BOARD_PLATFORM := mt6768
-
-# VNDK
-BOARD_VNDK_VERSION := current
-
-# Recovery Settings
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-BOARD_HAS_LARGE_FILESYSTEM := true
-BOARD_USES_GENERIC_KERNEL_IMAGE := false
-BOARD_HAS_NO_SELECT_BUTTON := true
-TARGET_NO_RECOVERY := true
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
-TARGET_RECOVERY_INITRC := $(DEVICE_PATH)/recovery/root/init.recovery.mt6768.rc
-BOARD_USES_RECOVERY_AS_BOOT :=
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-BOARD_MOVE_GSI_AVB_KEYS_TO_VENDOR_BOOT := true
 
-# Verified Boot
+# =========================
+# Platform
+# =========================
+TARGET_BOARD_PLATFORM := mt6768
+BOARD_VNDK_VERSION := current
+
+# =========================
+# Recovery (STABLE MODE)
+# =========================
+TARGET_NO_RECOVERY := true
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+
+BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_HAS_NO_SELECT_BUTTON := true
+
+BOARD_USES_GENERIC_KERNEL_IMAGE := false
+
+# =========================
+# AVB
+# =========================
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
-BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
-BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
-BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
-BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
 
-# Security Patches
-PLATFORM_SECURITY_PATCH := 2099-12-31
-PLATFORM_VERSION := 99.87.36
-PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
-VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
-BOOT_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
-
-# Crypto
+# =========================
+# Crypto (DISABLED for stability)
+# =========================
+# DO NOT ENABLE — causes bootloops on MTK A13 recovery
 # TW_INCLUDE_CRYPTO := true
 # TW_INCLUDE_CRYPTO_FBE := true
-# TW_USE_FSCRYPT_POLICY := 2
-# TW_INCLUDE_FBE_METADATA_DECRYPT := true
 
-# Metadata
-BOARD_USES_METADATA_PARTITION := true
-BOARD_ROOT_EXTRA_FOLDERS += metadata
-
-# Modules
-# TW_LOAD_VENDOR_BOOT_MODULES := true 
-
-# Tools
-TW_NO_LEGACY_PROPS := true
-TW_NO_USB_STORAGE := true
-TW_INCLUDE_FB2PNG := true
-TW_INCLUDE_NTFS_3G := true
-TW_INCLUDE_REPACKTOOLS := true
-TW_INCLUDE_RESETPROP := true
-TW_INCLUDE_LPTOOLS := true
-TW_INCLUDE_LIBRESETPROP := true
-TWRP_EVENT_LOGGING := true
-TWRP_INCLUDE_LOGCAT := true
-TARGET_USES_LOGD := true
-TARGET_USES_MKE2FS := true
-TW_USE_TOOLBOX := true
-
-# TWRP Configuration
-TW_BACKUP_EXCLUSIONS := /Files/fonts
-TW_EXTRA_LANGUAGES := false
-TW_SCREEN_BLANK_ON_BOOT := true
-TW_INPUT_BLACKLIST := "hbtp_vm"
-TW_EXCLUDE_APEX := true
-BOARD_USE_CUSTOM_RECOVERY_FONT := "roboto_15x24.h"
-TW_EXCLUDE_LPDUMP := true
-TW_EXCLUDE_SUPERSU := true
-TW_EXCLUDE_BASH := true
-TW_EXCLUDE_TZDATA := true
-TW_EXCLUDE_PYTHON := true
-TW_EXCLUDE_NANO := true
-TW_EXCLUDE_TWRPAPP := true
-
-# Brightness Screen
-TW_NO_SCREEN_BLANK := true
-TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel/brightness"
-TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 150
-
-# USB Configuration
+# =========================
+# USB (FIXED STABLE)
+# =========================
 TW_INCLUDE_LIBUSB := true
 TW_USB_STORAGE := true
 
-# MTP
+# IMPORTANT: DO NOT disable USB init
+
+# =========================
+# Debug
+# =========================
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
+TWRP_EVENT_LOGGING := true
+
+# =========================
+# Tools (SAFE ONLY)
+# =========================
+TW_INCLUDE_FB2PNG := true
+TW_INCLUDE_RESETPROP := true
+TW_INCLUDE_LPTOOLS := true
+TW_INCLUDE_LIBRESETPROP := true
+TW_USE_TOOLBOX := true
+
+TARGET_USES_MKE2FS := true
+
+# =========================
+# Storage
+# =========================
+RECOVERY_SDCARD_ON_DATA := true
+TW_USE_EXTERNAL_STORAGE := true
 TW_HAS_MTP := true
 TW_MTP_DEVICE := /dev/mtp_usb
 
-# Storage
-RECOVERY_SDCARD_ON_DATA := true
-TW_USE_EXTERNAL_STORAGE := true
-BOARD_ROOT_EXTRA_FOLDERS += usb-otg
-BOARD_ROOT_EXTRA_FOLDERS += external_sd
+# =========================
+# Screenshot
+# =========================
+TW_SCREENSHOT_FORMAT := png
 
-# Props
-TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
+# =========================
+# Removed broken configs (IMPORTANT)
+# =========================
+# TW_LOAD_VENDOR_BOOT_MODULES := true   ❌ removed (breaks MTK A13)
+# TW_EXCLUDE_DEFAULT_USB_INIT := true   ❌ removed (breaks OTG)
+# TW_BRIGHTNESS_PATH := ...             ❌ removed (causes fb issues)
 
-# StatusBar
-TW_STATUS_ICONS_ALIGN := center
-TW_CUSTOM_CPU_POS := "300"
-TW_CUSTOM_CLOCK_POS := "70"
-TW_CUSTOM_BATTERY_POS := "790"
-
-# Hack depends
-ALLOW_MISSING_DEPENDENCIES := true
-
-# Device 
+# =========================
+# Device version
+# =========================
 TW_DEVICE_VERSION := SPARK 20 by r3nzph
