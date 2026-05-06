@@ -1,22 +1,40 @@
-# Fstab
+# =========================
+# Fstab / Recovery behavior
+# =========================
 ro.postinstall.fstab.prefix=/system
 
-# ADB
-ro.secure=0
+# =========================
+# ADB (RECOVERY SAFE MODE)
+# =========================
 ro.adb.secure=0
 ro.debuggable=1
 
-# USB
-ro.sys.usb.storage.type=mtp
-persist.sys.usb.config=adb,mtp
-sys.usb.config=adb,mtp
-persist.sys.isUsbOtgEnabled=true
+# NOTE:
+# ro.secure is handled by recovery build flags
+# DO NOT force ro.secure=0 here
 
-# Gatekeeper
+# =========================
+# USB / MTP
+# =========================
+persist.sys.usb.config=mtp,adb
+sys.usb.config=mtp,adb
+ro.sys.usb.storage.type=mtp
+
+# OTG flag (safe hint only, real OTG is kernel-controlled)
+persist.sys.isUsbOtgEnabled=1
+
+# =========================
+# TEE / Gatekeeper (READ-ONLY INFO ONLY)
+# =========================
 ro.hardware.gatekeeper=trustonic
 
-# TEE
 ro.vendor.mtk_tee_gp_support=1
 ro.vendor.mtk_trustonic_tee_support=1
 
-keymaster_ver=4.1
+# =========================
+# IMPORTANT NOTES
+# =========================
+# DO NOT add:
+# - keymaster_ver (invalid property)
+# - duplicate USB configs
+# - ro.secure override (handled by recovery build system)
