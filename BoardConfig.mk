@@ -169,7 +169,7 @@ OF_DEFAULT_KEYMASTER_VERSION := 4.1
 # =========================
 # Modules
 # =========================
-TW_LOAD_VENDOR_BOOT_MODULES := true
+# TW_LOAD_VENDOR_BOOT_MODULES := true
 
 # =========================
 # Debug
