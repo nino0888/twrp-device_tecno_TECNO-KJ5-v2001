@@ -27,7 +27,11 @@ ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
 
+TARGET_COPY_OUT_PRODUCT := product
+TARGET_COPY_OUT_SYSTEM := system
+TARGET_COPY_OUT_SYSTEM_EXT := system_ext
 TARGET_COPY_OUT_VENDOR := vendor
+
 # =========================
 # Bootloader Settings
 # =========================
