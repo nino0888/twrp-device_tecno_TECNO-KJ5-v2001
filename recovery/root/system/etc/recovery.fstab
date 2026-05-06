@@ -1,25 +1,42 @@
-# Dynamic partitions (read-only, A/B safe)
-system      /system      ext4    ro,barrier=1    wait,logical,first_stage_mount,slotselect
-system_ext  /system_ext  ext4    ro,barrier=1    wait,logical,first_stage_mount,slotselect
-vendor      /vendor      ext4    ro,barrier=1    wait,logical,first_stage_mount,slotselect
-product     /product     ext4    ro,barrier=1    wait,logical,first_stage_mount,slotselect
+# =========================
+# Dynamic partitions (A/B, logical)
+# =========================
+system      /system      ext4    ro,barrier=1,discard    wait,logical,first_stage_mount,slotselect
+system_ext  /system_ext  ext4    ro,barrier=1,discard    wait,logical,first_stage_mount,slotselect
+vendor      /vendor      ext4    ro,barrier=1,discard    wait,logical,first_stage_mount,slotselect
+product     /product     ext4    ro,barrier=1,discard    wait,logical,first_stage_mount,slotselect
 
-# Metadata (required for Android 12/13 FBE)
-# Verify md_udc is correct symlink to metadata
-/dev/block/by-name/md_udc   /metadata   ext4    noatime,nosuid,nodev    wait,check,formattable
+# Optional but recommended for MTK A13
+vendor_dlkm /vendor_dlkm ext4    ro,barrier=1,discard    wait,logical,slotselect
+odm_dlkm    /odm_dlkm    ext4    ro,barrier=1,discard    wait,logical,slotselect
 
-# Data (NO encryption flags — non-decrypting setup)
-# Using ext4 for recovery stability
-/dev/block/by-name/userdata   /data   ext4    noatime,nosuid,nodev    wait,check,formattable,quota
+# =========================
+# Metadata (FIXED)
+# =========================
+/dev/block/by-name/metadata   /metadata   ext4    noatime,nosuid,nodev,discard    wait,check,formattable
 
-# Vendor-related persistent partitions (MTK specific)
-/dev/block/by-name/persist    /mnt/vendor/persist    ext4    noatime,nosuid,nodev    wait,check,formattable
-/dev/block/by-name/nvdata     /mnt/vendor/nvdata     ext4    noatime,nosuid,nodev    wait,check,formattable
-/dev/block/by-name/nvcfg      /mnt/vendor/nvcfg      ext4    noatime,nosuid,nodev    wait,check,formattable
-/dev/block/by-name/protect1   /mnt/vendor/protect_f  ext4    noatime,nosuid,nodev    wait,check,formattable
-/dev/block/by-name/protect2   /mnt/vendor/protect_s  ext4    noatime,nosuid,nodev    wait,check,formattable
+# =========================
+# Data (CRITICAL FIX)
+# =========================
+/dev/block/by-name/userdata   /data   f2fs    noatime,nosuid,nodev,discard    wait,check,formattable
 
-# Boot-related partitions (for flashing)
+# =========================
+# Cache (MTK uses tranfs)
+# =========================
+/dev/block/by-name/tranfs     /cache  ext4    noatime,nosuid,nodev,discard    wait,check,formattable
+
+# =========================
+# Persistent / vendor data
+# =========================
+/dev/block/by-name/persist    /mnt/vendor/persist    ext4    noatime,nosuid,nodev    wait
+/dev/block/by-name/nvdata     /mnt/vendor/nvdata     ext4    noatime,nosuid,nodev    wait
+/dev/block/by-name/nvcfg      /mnt/vendor/nvcfg      ext4    noatime,nosuid,nodev    wait
+/dev/block/by-name/protect1   /mnt/vendor/protect_f  ext4    noatime,nosuid,nodev    wait
+/dev/block/by-name/protect2   /mnt/vendor/protect_s  ext4    noatime,nosuid,nodev    wait
+
+# =========================
+# Boot partitions (flash support)
+# =========================
 /dev/block/by-name/boot          /boot          emmc    defaults    defaults
 /dev/block/by-name/vendor_boot   /vendor_boot   emmc    defaults    defaults
 /dev/block/by-name/dtbo          /dtbo          emmc    defaults    defaults
