@@ -41,6 +41,14 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 ALLOW_MISSING_DEPENDENCIES := true
 
 # =========================
+# IMPORTANT FIX (YOUR ERROR)
+# =========================
+TARGET_COPY_OUT_VENDOR := vendor
+TARGET_COPY_OUT_PRODUCT := product
+TARGET_COPY_OUT_SYSTEM := system
+TARGET_COPY_OUT_SYSTEM_EXT := system_ext
+
+# =========================
 # Display
 # =========================
 TARGET_SCREEN_DENSITY := 320
@@ -48,7 +56,7 @@ TW_THEME := portrait_hdpi
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
 # =========================
-# Assert
+# Device
 # =========================
 TARGET_OTA_ASSERT_DEVICE := KJ5
 
@@ -111,7 +119,7 @@ BOARD_MAIN_PARTITION_LIST += \
     vendor
 
 # =========================
-# Filesystems (IMPORTANT FIX)
+# Filesystems
 # =========================
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -124,10 +132,6 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 BOARD_USES_METADATA_PARTITION := true
-
-# IMPORTANT FIX (MTK stability)
-BOARD_SUPPRESS_SECURE_ERASE := true
-BOARD_HAS_LARGE_FILESYSTEM := true
 
 # =========================
 # Platform
@@ -149,13 +153,13 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_USES_RECOVERY_AS_VENDOR_BOOT := true
 
 # =========================
-# AVB (KEEP SIMPLE)
+# AVB
 # =========================
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
 # =========================
-# Crypto (OFF FOR NOW = STABLE BOOT)
+# Crypto (OFF STABLE BUILD)
 # =========================
 TW_PREPARE_MEDIA_EARLY := true
 TW_FORCE_KEYMASTER_VER := true
@@ -169,7 +173,7 @@ TARGET_USES_LOGD := true
 TWRP_EVENT_LOGGING := true
 
 # =========================
-# UI / Stability
+# UI
 # =========================
 TW_ALLOW_FORMAT_DATA := true
 TW_FRAMERATE := 90
