@@ -26,6 +26,8 @@ BOARD_USES_MTK_HARDWARE := true
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
+
+TARGET_COPY_OUT_VENDOR := vendor
 # =========================
 # Bootloader Settings
 # =========================
