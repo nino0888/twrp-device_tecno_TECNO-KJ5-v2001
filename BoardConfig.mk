@@ -140,7 +140,7 @@ BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 
 # IMPORTANT: KEEP THIS (this is why your GKI UI works)
-BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_USES_GENERIC_KERNEL_IMAGE := false
 
 # =========================
 # AVB
