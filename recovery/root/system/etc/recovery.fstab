@@ -10,17 +10,17 @@ vendor_dlkm /vendor_dlkm ext4    ro,barrier=1,discard    wait,logical,slotselect
 odm_dlkm    /odm_dlkm    ext4    ro,barrier=1,discard    wait,logical,slotselect
 
 # =========================
-# Metadata (CRITICAL for FBE + /data detection)
+# Metadata (CRITICAL FIX)
 # =========================
 /dev/block/by-name/metadata   /metadata   ext4    noatime,nosuid,nodev,discard    wait,check,formattable
 
 # =========================
-# Data (FIXED HYBRID SAFE)
+# Data (HYBRID SAFE - NO DECRYPTION)
 # =========================
 /dev/block/by-name/userdata   /data   f2fs   noatime,nosuid,nodev,discard,inlinecrypt    wait,check,formattable,quota,latemount
 
 # =========================
-# Cache (MTK legacy partition)
+# Cache (MTK legacy - keep but optional)
 # =========================
 /dev/block/by-name/tranfs     /cache  ext4    noatime,nosuid,nodev,discard    wait,check,formattable
 
@@ -34,7 +34,7 @@ odm_dlkm    /odm_dlkm    ext4    ro,barrier=1,discard    wait,logical,slotselect
 /dev/block/by-name/protect2   /mnt/vendor/protect_s  ext4    noatime,nosuid,nodev    wait
 
 # =========================
-# Boot / Flash partitions
+# Boot / Firmware partitions
 # =========================
 /dev/block/by-name/boot          /boot          emmc    defaults    defaults
 /dev/block/by-name/vendor_boot   /vendor_boot   emmc    defaults    defaults
