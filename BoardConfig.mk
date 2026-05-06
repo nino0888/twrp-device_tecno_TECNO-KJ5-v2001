@@ -41,24 +41,19 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 ALLOW_MISSING_DEPENDENCIES := true
 
 # =========================
-# Display (IMPORTANT FIX AREA)
+# Display
 # =========================
 TARGET_SCREEN_DENSITY := 320
 TW_THEME := portrait_hdpi
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBA_8888"
-
-# FIX: framebuffer/screenshot stability (MTK safe)
-TW_NO_SCREEN_BLANK := true
-TW_SCREEN_BLANK_ON_BOOT := true
-TW_USE_COM_COMPRESSION := false
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
 # =========================
-# Device
+# Assert
 # =========================
 TARGET_OTA_ASSERT_DEVICE := KJ5
 
 # =========================
-# Kernel (PREBUILT ONLY)
+# Kernel (PREBUILT MTK)
 # =========================
 TARGET_NO_KERNEL := false
 TARGET_FORCE_PREBUILT_KERNEL := true
@@ -84,7 +79,7 @@ BOARD_PAGE_SIZE := 4096
 
 BOARD_VENDOR_CMDLINE := bootopt=64S3,32N2,64N2
 
-BOARD_MKBOOTIMG_ARGS += --vendor_cmdline $(BOARD_VENDOR_CMDLINE)
+BOARD_MKBOOTIMG_ARGS += --vendor_cmdline "$(BOARD_VENDOR_CMDLINE)"
 BOARD_MKBOOTIMG_ARGS += --pagesize $(BOARD_PAGE_SIZE)
 BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
@@ -116,7 +111,7 @@ BOARD_MAIN_PARTITION_LIST += \
     vendor
 
 # =========================
-# Filesystems
+# Filesystems (IMPORTANT FIX)
 # =========================
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -130,6 +125,10 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 BOARD_USES_METADATA_PARTITION := true
 
+# IMPORTANT FIX (MTK stability)
+BOARD_SUPPRESS_SECURE_ERASE := true
+BOARD_HAS_LARGE_FILESYSTEM := true
+
 # =========================
 # Platform
 # =========================
@@ -137,28 +136,26 @@ TARGET_BOARD_PLATFORM := mt6768
 BOARD_VNDK_VERSION := current
 
 # =========================
-# Recovery (HYBRID STABLE)
+# Recovery (HYBRID SAFE)
 # =========================
 TARGET_NO_RECOVERY := true
 
 BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
 BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
-BOARD_USES_RECOVERY_AS_VENDOR_BOOT := true
 
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 
-BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
-BOARD_SUPPRESS_SECURE_ERASE := true
+BOARD_USES_RECOVERY_AS_VENDOR_BOOT := true
 
 # =========================
-# AVB
+# AVB (KEEP SIMPLE)
 # =========================
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
 # =========================
-# Crypto (DISABLED STABLE)
+# Crypto (OFF FOR NOW = STABLE BOOT)
 # =========================
 TW_PREPARE_MEDIA_EARLY := true
 TW_FORCE_KEYMASTER_VER := true
@@ -172,21 +169,26 @@ TARGET_USES_LOGD := true
 TWRP_EVENT_LOGGING := true
 
 # =========================
-# Tools
+# UI / Stability
 # =========================
-TW_INCLUDE_FB2PNG := true
-TW_INCLUDE_RESETPROP := true
-TW_INCLUDE_LPTOOLS := true
-TW_USE_TOOLBOX := true
-TARGET_USES_MKE2FS := true
+TW_ALLOW_FORMAT_DATA := true
+TW_FRAMERATE := 90
+TW_EXTRA_LANGUAGES := true
+TW_INCLUDE_FUSE_EXFAT := true
+
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_NO_SCREEN_BLANK := true
 
 # =========================
-# USB / Storage FIX
+# USB
 # =========================
 TW_USES_OTG_USB := true
 TW_HAS_MTP := true
 TW_MTP_DEVICE := /dev/mtp_usb
 
+# =========================
+# Storage
+# =========================
 RECOVERY_SDCARD_ON_DATA := true
 TW_USB_STORAGE := true
 
@@ -203,4 +205,4 @@ TW_CUSTOM_CPU_TEMP_PATH := sys/devices/virtual/thermal/thermal_zone4/temp
 # =========================
 # Device Info
 # =========================
-TW_DEVICE_VERSION := SPARK 20 by r3nzph
+TW_DEVICE_VERSION := KJ5 OFox Hybrid Prebuilt
