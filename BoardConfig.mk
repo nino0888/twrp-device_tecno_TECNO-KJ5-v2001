@@ -104,14 +104,14 @@ BOARD_SUPER_PARTITION_GROUPS := main
 BOARD_MAIN_SIZE := 9122611200
 BOARD_SUPER_PARTITIONS_SIZE := 9122611200
 
-BOARD_MAIN_PARTITION_LIST += \
+BOARD_MAIN_PARTITION_LIST := \
     product \
     system \
     system_ext \
     vendor
 
 # =========================
-# Filesystems (FIXED)
+# Filesystems
 # =========================
 BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
@@ -131,7 +131,7 @@ TARGET_BOARD_PLATFORM := mt6768
 BOARD_VNDK_VERSION := current
 
 # =========================
-# Recovery (Hybrid / Stable)
+# Recovery (STABLE VENDOR_BOOT MODE)
 # =========================
 TARGET_NO_RECOVERY := true
 
@@ -143,25 +143,23 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_SUPPRESS_SECURE_ERASE := true
+
+# IMPORTANT (KEEP CLEAN)
 BOARD_USES_RECOVERY_AS_VENDOR_BOOT := true
 
 # =========================
-# AVB
+# AVB (SAFE MODE)
 # =========================
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
-BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
-BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
-BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
-BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
+# ❌ REMOVED recovery key override (causes build inconsistency in OFOX)
+# BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+# BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
 
 # =========================
-# Crypto (DISABLED for stability)
+# Crypto (DISABLED)
 # =========================
-# TW_INCLUDE_CRYPTO := true
-# TW_INCLUDE_CRYPTO_FBE := true
-
 TW_PREPARE_MEDIA_EARLY := true
 TW_FORCE_KEYMASTER_VER := true
 OF_DEFAULT_KEYMASTER_VERSION := 4.1
@@ -198,6 +196,7 @@ TW_ALLOW_FORMAT_DATA := true
 TW_FRAMERATE := 90
 TW_INCLUDE_FUSE_EXFAT := true
 TW_EXTRA_LANGUAGES := true
+
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_NO_SCREEN_BLANK := true
 
@@ -211,20 +210,15 @@ TW_EXCLUDE_TWRPAPP := true
 TW_NO_FASTBOOT_BOOT := true
 
 # =========================
-# Brightness (SAFE)
+# Brightness
 # =========================
-# Uncomment ONLY if verified working
-# TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel/brightness"
-
 TW_MAX_BRIGHTNESS := 255
 TW_DEFAULT_BRIGHTNESS := 120
 
 # =========================
-# USB / OTG (SAFE)
+# USB / OTG
 # =========================
 TW_USES_OTG_USB := true
-
-# DO NOT disable default USB init
 
 # =========================
 # Storage
