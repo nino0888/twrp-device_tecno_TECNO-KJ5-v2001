@@ -26,7 +26,9 @@ BOARD_USES_MTK_HARDWARE := true
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
 
-
+# =========================
+# Partition mapping
+# =========================
 TARGET_COPY_OUT_PRODUCT := product
 TARGET_COPY_OUT_SYSTEM := system
 TARGET_COPY_OUT_SYSTEM_EXT := system_ext
@@ -47,7 +49,7 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 ALLOW_MISSING_DEPENDENCIES := true
 
 # =========================
-# Display Settings
+# Display Settings (FIXED FOR SCREENSHOT)
 # =========================
 TARGET_SCREEN_DENSITY := 320
 TW_THEME := portrait_hdpi
@@ -56,12 +58,19 @@ DEVICE_RESOLUTION := 1612x720
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_NO_SCREEN_BLANK := true
 
-# SAFE brightness (NO hardcoded broken path)
+# IMPORTANT FOR MTK SCREENSHOT STABILITY
+TW_INCLUDE_FB2PNG := true
+TW_USE_TOOLBOX := true
+
+# Force safe framebuffer fallback behavior
+TW_USE_FRAMEBUFFER := true
+
+# Brightness safe values (avoid broken sysfs paths)
 TW_MAX_BRIGHTNESS := 255
 TW_DEFAULT_BRIGHTNESS := 120
 
 # =========================
-# Kernel (PREBUILT ONLY - STABLE)
+# Kernel (PREBUILT ONLY)
 # =========================
 TARGET_NO_KERNEL := false
 TARGET_FORCE_PREBUILT_KERNEL := true
@@ -138,7 +147,7 @@ TARGET_BOARD_PLATFORM := mt6768
 BOARD_VNDK_VERSION := current
 
 # =========================
-# Recovery (STABLE MODE)
+# Recovery (STABLE)
 # =========================
 TARGET_NO_RECOVERY := true
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
@@ -150,11 +159,10 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 
 BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
-
 BOARD_USES_GENERIC_KERNEL_IMAGE := false
 
 # =========================
-# AVB
+# AVB (SAFE MINIMAL)
 # =========================
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
@@ -162,17 +170,16 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 # =========================
 # Crypto (DISABLED for stability)
 # =========================
-# DO NOT ENABLE — causes bootloops on MTK A13 recovery
 # TW_INCLUDE_CRYPTO := true
 # TW_INCLUDE_CRYPTO_FBE := true
 
 # =========================
-# USB (FIXED STABLE)
+# USB (STABLE)
 # =========================
 TW_INCLUDE_LIBUSB := true
 TW_USB_STORAGE := true
-
-# IMPORTANT: DO NOT disable USB init
+TW_HAS_MTP := true
+TW_MTP_DEVICE := /dev/mtp_usb
 
 # =========================
 # Debug
@@ -182,14 +189,11 @@ TARGET_USES_LOGD := true
 TWRP_EVENT_LOGGING := true
 
 # =========================
-# Tools (SAFE ONLY)
+# Tools (SAFE)
 # =========================
-TW_INCLUDE_FB2PNG := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LPTOOLS := true
 TW_INCLUDE_LIBRESETPROP := true
-TW_USE_TOOLBOX := true
-
 TARGET_USES_MKE2FS := true
 
 # =========================
@@ -197,20 +201,11 @@ TARGET_USES_MKE2FS := true
 # =========================
 RECOVERY_SDCARD_ON_DATA := true
 TW_USE_EXTERNAL_STORAGE := true
-TW_HAS_MTP := true
-TW_MTP_DEVICE := /dev/mtp_usb
 
 # =========================
 # Screenshot
 # =========================
-TW_SCREENSHOT_FORMAT := png
-
-# =========================
-# Removed broken configs (IMPORTANT)
-# =========================
-# TW_LOAD_VENDOR_BOOT_MODULES := true   ❌ removed (breaks MTK A13)
-# TW_EXCLUDE_DEFAULT_USB_INIT := true   ❌ removed (breaks OTG)
-# TW_BRIGHTNESS_PATH := ...             ❌ removed (causes fb issues)
+TW_SCREENSHOT_FORMAT := PNG
 
 # =========================
 # Device version
