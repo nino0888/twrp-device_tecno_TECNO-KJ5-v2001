@@ -1,15 +1,15 @@
 # =========================
-# Dynamic Partitions (DO NOT hardcode _a/_b)
+# Dynamic Partitions (SAFE SLOT-AWARE)
 # =========================
-/system_image      emmc    /dev/block/mapper/system        flags=display="System Image";backup=1;flashimg=1
-/vendor_image      emmc    /dev/block/mapper/vendor        flags=display="Vendor Image";backup=1;flashimg=1
-/product_image     emmc    /dev/block/mapper/product       flags=display="Product Image";backup=1;flashimg=1
-/system_ext_image  emmc    /dev/block/mapper/system_ext    flags=display="System_EXT Image";backup=1;flashimg=1
-/vendor_dlkm_image emmc    /dev/block/mapper/vendor_dlkm   flags=display="Vendor DLKM";backup=1;flashimg=1
-/odm_dlkm_image    emmc    /dev/block/mapper/odm_dlkm      flags=display="ODM DLKM";backup=1;flashimg=1
+/system_image      emmc    /dev/block/mapper/system        flags=display="System Image";backup=1;flashimg=1;slotselect
+/vendor_image      emmc    /dev/block/mapper/vendor        flags=display="Vendor Image";backup=1;flashimg=1;slotselect
+/product_image     emmc    /dev/block/mapper/product       flags=display="Product Image";backup=1;flashimg=1;slotselect
+/system_ext_image  emmc    /dev/block/mapper/system_ext    flags=display="System EXT";backup=1;flashimg=1;slotselect
+/vendor_dlkm_image emmc    /dev/block/mapper/vendor_dlkm   flags=display="Vendor DLKM";backup=1;flashimg=1;slotselect
+/odm_dlkm_image    emmc    /dev/block/mapper/odm_dlkm      flags=display="ODM DLKM";backup=1;flashimg=1;slotselect
 
 # =========================
-# Boot Partitions (A/B aware)
+# Boot partitions
 # =========================
 /boot          emmc    /dev/block/by-name/boot         flags=display="Boot";backup=1;flashimg=1;slotselect
 /vendor_boot   emmc    /dev/block/by-name/vendor_boot  flags=display="Vendor Boot";backup=1;flashimg=1;slotselect
@@ -17,22 +17,22 @@
 /vbmeta        emmc    /dev/block/by-name/vbmeta       flags=display="VBMeta";backup=1;flashimg=1;slotselect
 
 # =========================
-# Critical Partitions (SAFE BACKUP ONLY)
+# Critical system partitions
 # =========================
 /metadata      ext4    /dev/block/by-name/metadata     flags=display="Metadata";backup=1
 /misc          emmc    /dev/block/by-name/misc         flags=display="Misc";backup=1
 
 # =========================
-# Sensitive (IMEI / calibration) — BACKUP ONLY
+# Sensitive (BACKUP ONLY - NEVER FLASH)
 # =========================
 /nvdata     ext4   /dev/block/by-name/nvdata     flags=display="Nvdata";backup=1
 /nvcfg      ext4   /dev/block/by-name/nvcfg      flags=display="Nvcfg";backup=1
-/protect_f  ext4   /dev/block/by-name/protect1   flags=display="Protect_f";backup=1
-/protect_s  ext4   /dev/block/by-name/protect2   flags=display="Protect_s";backup=1
+/protect_f  ext4   /dev/block/by-name/protect1   flags=display="Protect F";backup=1
+/protect_s  ext4   /dev/block/by-name/protect2   flags=display="Protect S";backup=1
 /nvram      emmc   /dev/block/by-name/nvram      flags=display="Nvram";backup=1
 
 # =========================
-# Firmware (optional visibility)
+# Firmware (safe backup only)
 # =========================
 /logo   emmc   /dev/block/by-name/logo   flags=display="Logo";backup=1
 /tee1   emmc   /dev/block/by-name/tee1   flags=display="TEE1";backup=1
@@ -41,7 +41,7 @@
 /otp    emmc   /dev/block/by-name/otp    flags=display="OTP";backup=1
 
 # =========================
-# Removable Storage
+# Removable storage
 # =========================
 /external_sd  vfat  /dev/block/mmcblk1p1  /dev/block/mmcblk1  flags=display="MicroSD";storage;wipeingui;removable
-/usb-otg      vfat  /dev/block/sda1                       flags=display="USB-OTG";storage;wipeingui;removable;fsflags=utf8
+/usb-otg      vfat  /dev/block/sda1                       flags=display="USB OTG";storage;wipeingui;removable;fsflags="utf8"
