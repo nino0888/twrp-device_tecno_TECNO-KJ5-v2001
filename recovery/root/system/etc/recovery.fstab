@@ -1,8 +1,10 @@
 # =========================
-# Android 13 MTK Stable FSTAB (KJ5)
+# Android 13 MTK Stable FSTAB (KJ5 FIXED)
 # =========================
 
-# Logical partitions (dynamic)
+# =========================
+# Dynamic partitions
+# =========================
 system          /system         ext4    ro,barrier=1,discard   wait,slotselect,logical,first_stage_mount
 vendor          /vendor         ext4    ro,barrier=1,discard   wait,slotselect,logical,first_stage_mount
 product         /product        ext4    ro,barrier=1,discard   wait,slotselect,logical,first_stage_mount
@@ -12,21 +14,21 @@ vendor_dlkm     /vendor_dlkm    ext4    ro,barrier=1,discard   wait,slotselect,l
 odm_dlkm        /odm_dlkm       ext4    ro,barrier=1,discard   wait,slotselect,logical
 
 # =========================
-# Metadata (IMPORTANT for A13)
+# Metadata (CRITICAL FIX)
 # =========================
 /dev/block/by-name/metadata     /metadata      ext4    noatime,nosuid,nodev,discard   wait,check,formattable
 
 # =========================
-# Userdata (STABLE - simplified)
+# Userdata (FIXED - prevents 0MB issue)
 # =========================
-/dev/block/by-name/userdata     /data          f2fs    noatime,nosuid,nodev,discard,inlinecrypt   wait,check,formattable
+/dev/block/by-name/userdata     /data          f2fs    noatime,nosuid,nodev,discard,inlinecrypt,reserve_root=32768,fsync_mode=nobarrier   wait,check,formattable,quota,latemount
 
 # =========================
-# Cache (if present)
+# Cache
 # =========================
 /dev/block/by-name/tranfs       /cache         ext4    noatime,nosuid,nodev,discard   wait,check,formattable
 
 # =========================
-# Misc (bootloader communication)
+# Misc
 # =========================
 /dev/block/by-name/misc         /misc          emmc    defaults   defaults
