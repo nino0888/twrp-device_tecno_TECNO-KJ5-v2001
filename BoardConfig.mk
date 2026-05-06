@@ -4,7 +4,7 @@
 DEVICE_PATH := device/tecno/KJ5
 
 # =========================
-# Architecture Settings
+# Architecture
 # =========================
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
@@ -34,26 +34,26 @@ TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
 # =========================
-# Build Hacks
+# Build Fixes
 # =========================
 BUILD_BROKEN_DUP_RULES := true
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 ALLOW_MISSING_DEPENDENCIES := true
 
 # =========================
-# Display
+# Display (CRITICAL FOR SCREENSHOT + FB)
 # =========================
 TARGET_SCREEN_DENSITY := 320
 TW_THEME := portrait_hdpi
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
 # =========================
-# Assert
+# Device
 # =========================
 TARGET_OTA_ASSERT_DEVICE := KJ5
 
 # =========================
-# Kernel (PREBUILT ONLY)
+# Kernel (PREBUILT MTK)
 # =========================
 TARGET_NO_KERNEL := false
 TARGET_FORCE_PREBUILT_KERNEL := true
@@ -67,13 +67,13 @@ BOARD_RAMDISK_USE_LZ4 := true
 BOARD_USES_GENERIC_KERNEL_IMAGE := false
 
 # =========================
-# Boot Image Config
+# Boot Image
 # =========================
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_KERNEL_BASE := 0x40078000
 BOARD_KERNEL_OFFSET := 0x00008000
-BOARD_KERNEL_TAGS_OFFSET := 0x0bc08000
 BOARD_RAMDISK_OFFSET := 0x07c08000
+BOARD_KERNEL_TAGS_OFFSET := 0x0bc08000
 BOARD_DTB_OFFSET := 0x0bc08000
 BOARD_PAGE_SIZE := 4096
 
@@ -104,19 +104,20 @@ BOARD_SUPER_PARTITION_GROUPS := main
 BOARD_MAIN_SIZE := 9122611200
 BOARD_SUPER_PARTITIONS_SIZE := 9122611200
 
-BOARD_MAIN_PARTITION_LIST := \
-    product \
+BOARD_MAIN_PARTITION_LIST += \
     system \
     system_ext \
+    product \
     vendor
 
 # =========================
-# Filesystems
+# Filesystems (IMPORTANT FIX)
 # =========================
-BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -131,7 +132,7 @@ TARGET_BOARD_PLATFORM := mt6768
 BOARD_VNDK_VERSION := current
 
 # =========================
-# Recovery (STABLE VENDOR_BOOT MODE)
+# Recovery (HYBRID SAFE)
 # =========================
 TARGET_NO_RECOVERY := true
 
@@ -144,21 +145,17 @@ BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 
-# IMPORTANT (KEEP CLEAN)
-BOARD_USES_RECOVERY_AS_VENDOR_BOOT := true
+# IMPORTANT: KEEP FALSE FOR MTK PREBUILT RECOVERY
+BOARD_USES_GENERIC_KERNEL_IMAGE := false
 
 # =========================
-# AVB (SAFE MODE)
+# AVB
 # =========================
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
-# ❌ REMOVED recovery key override (causes build inconsistency in OFOX)
-# BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
-# BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
-
 # =========================
-# Crypto (DISABLED)
+# Crypto (DISABLED STABLE)
 # =========================
 TW_PREPARE_MEDIA_EARLY := true
 TW_FORCE_KEYMASTER_VER := true
@@ -167,6 +164,7 @@ OF_DEFAULT_KEYMASTER_VERSION := 4.1
 # =========================
 # Modules
 # =========================
+# DO NOT FORCE vendor_boot modules yet (causes bootloop in MTK)
 # TW_LOAD_VENDOR_BOOT_MODULES := true
 
 # =========================
@@ -180,17 +178,13 @@ TWRP_EVENT_LOGGING := true
 # Tools
 # =========================
 TW_INCLUDE_FB2PNG := true
-TW_INCLUDE_NTFS_3G := true
-TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LPTOOLS := true
-TW_INCLUDE_LIBRESETPROP := true
 TW_USE_TOOLBOX := true
-
 TARGET_USES_MKE2FS := true
 
 # =========================
-# TWRP Config
+# UI / Screen Stability (IMPORTANT FOR SCREENSHOT FIX)
 # =========================
 TW_ALLOW_FORMAT_DATA := true
 TW_FRAMERATE := 90
@@ -200,25 +194,12 @@ TW_EXTRA_LANGUAGES := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_NO_SCREEN_BLANK := true
 
-TW_INPUT_BLACKLIST := "hbtp_vm"
-
-TW_EXCLUDE_APEX := true
-TW_EXCLUDE_TZDATA := true
-TW_EXCLUDE_PYTHON := true
-TW_EXCLUDE_TWRPAPP := true
-
-TW_NO_FASTBOOT_BOOT := true
-
 # =========================
-# Brightness
-# =========================
-TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 120
-
-# =========================
-# USB / OTG
+# USB
 # =========================
 TW_USES_OTG_USB := true
+TW_HAS_MTP := true
+TW_MTP_DEVICE := /dev/mtp_usb
 
 # =========================
 # Storage
@@ -226,16 +207,13 @@ TW_USES_OTG_USB := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_USB_STORAGE := true
 
-TW_HAS_MTP := true
-TW_MTP_DEVICE := /dev/mtp_usb
-
 # =========================
 # Props
 # =========================
 TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
 
 # =========================
-# Misc
+# Misc Fix
 # =========================
 TW_CUSTOM_CPU_TEMP_PATH := sys/devices/virtual/thermal/thermal_zone4/temp
 
