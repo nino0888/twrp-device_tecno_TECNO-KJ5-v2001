@@ -161,6 +161,8 @@ BOARD_HAS_LARGE_FILESYSTEM := true
 BOARD_HAS_NO_SELECT_BUTTON := true
 BOARD_USES_GENERIC_KERNEL_IMAGE := false
 
+BOARD_USES_METADATA_PARTITION := true
+
 # =========================
 # AVB (SAFE MINIMAL)
 # =========================
